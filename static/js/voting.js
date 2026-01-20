@@ -183,6 +183,13 @@ async function confirmVote() {
 }
 
 function playAudio(type) {
-    // const audio = new Audio(`/static/sounds/${type}.mp3`);
-    // audio.play();
+    if (type === 'end') {
+        // O caminho deve ser relativo à raiz do servidor
+        const audio = new Audio('/static/sounds/urna.mp3');
+        
+        // Tenta tocar o som
+        audio.play().catch(error => {
+            console.warn("O navegador bloqueou o áudio automático ou arquivo não encontrado.", error);
+        });
+    }
 }
