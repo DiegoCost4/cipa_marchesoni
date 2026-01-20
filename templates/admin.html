@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen w-full p-8 bg-gray-100 overflow-y-auto">
+    <div class="max-w-7xl mx-auto">
+        
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Painel CIPA Marchesoni</h1>
+                    <p class="text-gray-500">Gestão em Tempo Real</p>
+                </div>
+                
+                <button onclick="importCSV()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-sm flex items-center gap-2 shadow-md transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                    Sincronizar RH
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500 flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-bold uppercase">Total Colaboradores</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ stats.total }}</p>
+                    </div>
+                    <div class="text-blue-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow border-l-4 border-green-500 flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-bold uppercase">Já Votaram</p>
+                        <p class="text-3xl font-bold text-green-600">{{ stats.votes }}</p>
+                        <p class="text-xs text-green-500 mt-1 font-bold">{{ stats.percent }}% Concluído</p>
+                    </div>
+                    <div class="text-green-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-500 flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-bold uppercase">Ainda Faltam</p>
+                        <p class="text-3xl font-bold text-red-600">{{ stats.missing }}</p>
+                    </div>
+                    <div class="text-red-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-8">
+                <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-1000" style="width: {{ stats.percent }}%"></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1">
+                <div class="bg-white p-6 rounded shadow mb-8">
+                    <h2 class="text-xl font-bold mb-4 text-blue-600 border-b pb-2">Novo Candidato</h2>
+                    <form method="POST" action="/admin">
+                        <div class="mb-4 relative">
+                            <label class="block text-gray-700 text-xs font-bold mb-1 uppercase">Buscar por CPF do Colaborador</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="searchCpf" class="w-full border p-2 rounded text-sm" placeholder="Apenas números">
+                                <button type="button" onclick="searchEmployee()" class="bg-gray-200 hover:bg-gray-300 px-3 rounded">🔍</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Nome Completo</label>
+                            <input type="text" name="name" id="candName" required class="w-full border p-2 rounded bg-gray-50 focus:bg-white transition">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Departamento</label>
+                            <input type="text" name="department" id="candDept" required class="w-full border p-2 rounded bg-gray-50 focus:bg-white transition">
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-3 rounded hover:bg-blue-700 font-bold w-full shadow-lg transform transition active:scale-95">
+                            Salvar Candidato
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 rounded shadow mb-8">
+                    <h2 class="text-xl font-bold mb-4 text-green-600 border-b pb-2">Ranking de Votação</h2>
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-600 text-sm uppercase">
+                                <th class="p-3">Nº</th>
+                                <th class="p-3">Candidato</th>
+                                <th class="p-3">Departamento</th>
+                                <th class="p-3 text-center">Votos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in candidates %}
+                            <tr class="border-b hover:bg-gray-50 transition">
+                                <td class="p-3 font-bold text-xl text-gray-400">#{{ c.number }}</td>
+                                <td class="p-3 font-medium">{{ c.name }}</td>
+                                <td class="p-3 text-sm text-gray-500">{{ c.department }}</td>
+                                <td class="p-3 text-center">
+                                    <span class="bg-blue-100 text-blue-800 py-1 px-3 rounded-full font-bold text-lg">{{ c.votes_count }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white p-6 rounded shadow mt-4">
+            <h2 class="text-xl font-bold mb-4 text-purple-600">Auditoria (Últimos 20 votos)</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {% for log in logs[:18] %}
+                <div class="border rounded p-2 text-center text-xs bg-gray-50">
+                    <p class="font-bold mb-1">{{ log.timestamp.strftime('%H:%M') }}</p>
+                    <p class="text-gray-500 mb-2">{{ log.cpf[:3] }}.***.***-{{ log.cpf[-2:] }}</p>
+                    <a href="{{ url_for('static', filename='uploads/' + log.photo_path) }}" target="_blank" class="text-blue-500 hover:underline">Ver Foto</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function importCSV() {
+    if(!confirm("Tem certeza? Isso irá recarregar a base de colaboradores.")) return;
+    
+    try {
+        const res = await fetch('/admin/import-csv', {method: 'POST'});
+        const data = await res.json();
+        alert(data.message || data.error);
+        if(data.success) location.reload();
+    } catch(e) {
+        alert("Erro na importação");
+    }
+}
+
+async function searchEmployee() {
+    const cpf = document.getElementById('searchCpf').value;
+    if(!cpf) return;
+    
+    const res = await fetch(`/api/get-employee/${cpf}`);
+    const data = await res.json();
+    
+    if(data.found) {
+        document.getElementById('candName').value = data.name;
+        document.getElementById('candDept').value = data.department;
+    } else {
+        alert("Colaborador não encontrado na base importada.");
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIPA Marchesoni 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .urna-screen { background-color: #e0e0e0; border: 20px solid #f3f4f6; }
+        .tecla { box-shadow: 2px 2px 0px #333; transition: all 0.1s; }
+        .tecla:active { box-shadow: 1px 1px 0px #333; transform: translate(1px, 1px); }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+    {% block content %}{% endblock %}
+</body>
+</html>

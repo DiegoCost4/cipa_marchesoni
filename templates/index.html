@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w-full max-w-5xl bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col md:flex-row h-[600px]">
+    
+    <div class="w-full md:w-1/2 p-6 bg-slate-800 text-white flex flex-col items-center justify-center relative">
+        <h2 class="text-xl font-bold mb-4">Identificação do Eleitor</h2>
+        
+        <div class="relative w-64 h-64 bg-black rounded-lg overflow-hidden border-4 border-slate-600 mb-4">
+            <video id="video" autoplay playsinline class="w-full h-full object-cover"></video>
+            <canvas id="canvas" class="hidden"></canvas>
+        </div>
+
+        <div id="step-1-controls" class="w-full max-w-xs text-center">
+            <label class="block text-sm mb-1 text-slate-300">Digite seu CPF (Apenas números)</label>
+            
+            <input type="text" id="cpfInput" maxlength="11" 
+                class="w-full p-3 rounded text-black font-bold text-center text-lg mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                placeholder="000.000.000-00">
+            
+            <p id="cpf-feedback" class="text-sm font-bold min-h-[20px] mb-4"></p>
+
+            <button id="btn-enable-vote" onclick="startVoting()" disabled
+                    class="w-full bg-blue-600 text-white font-bold py-3 rounded transition opacity-50 cursor-not-allowed">
+                Habilitar Votação
+            </button>
+        </div>
+
+        <div id="auth-status" class="hidden mt-4 text-green-400 font-bold">
+            ✓ Identificado. Prossiga para a Urna.
+        </div>
+        
+        <div class="absolute bottom-2 text-xs text-slate-500">Sistema CIPA Marchesoni v1.0</div>
+    </div>
+
+    <div class="w-full md:w-1/2 p-4 bg-gray-200 flex flex-col relative opacity-50 pointer-events-none" id="urna-panel">
+        
+        <div class="bg-gray-100 border-4 border-gray-400 h-48 mb-6 p-4 flex flex-col justify-between shadow-inner relative">
+            <div id="screen-default">
+                <p class="text-sm font-bold uppercase">Número do Candidato:</p>
+                <div class="flex gap-2 mt-2 justify-center">
+                    <div id="digit-1" class="w-10 h-14 border border-gray-400 bg-white flex items-center justify-center text-2xl font-bold"></div>
+                    <div id="digit-2" class="w-10 h-14 border border-gray-400 bg-white flex items-center justify-center text-2xl font-bold"></div>
+                </div>
+            </div>
+            
+            <div id="candidate-data" class="hidden mt-2">
+                <p class="text-xs text-gray-500">Nome:</p>
+                <p class="text-lg font-bold truncate" id="cand-name">...</p>
+                <p class="text-xs text-gray-500">Depto:</p>
+                <p class="text-sm font-bold" id="cand-dept">...</p>
+            </div>
+
+            <div id="screen-msg" class="absolute inset-0 flex items-center justify-center bg-white hidden">
+                <h1 class="text-4xl font-bold">FIM</h1>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 p-4 rounded-lg shadow-xl">
+            <div class="grid grid-cols-3 gap-3 mb-4">
+                <button onclick="press(1)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">1</button>
+                <button onclick="press(2)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">2</button>
+                <button onclick="press(3)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">3</button>
+                <button onclick="press(4)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">4</button>
+                <button onclick="press(5)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">5</button>
+                <button onclick="press(6)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">6</button>
+                <button onclick="press(7)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">7</button>
+                <button onclick="press(8)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">8</button>
+                <button onclick="press(9)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">9</button>
+                <div></div>
+                <button onclick="press(0)" class="tecla bg-gray-900 text-white p-3 rounded font-bold text-xl hover:bg-black">0</button>
+                <div></div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="whiteVote()" class="tecla bg-white text-black text-xs font-bold py-3 rounded uppercase text-center">Branco</button>
+                <button onclick="correct()" class="tecla bg-orange-500 text-black text-xs font-bold py-3 rounded uppercase text-center">Corrige</button>
+                <button onclick="confirmVote()" class="tecla bg-green-600 text-black text-xs font-bold py-3 rounded uppercase text-center h-12 mt-[-10px] shadow-lg">Confirma</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/voting.js') }}"></script>
+{% endblock %}

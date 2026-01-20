@@ -1,0 +1,25 @@
+/* Efeito de profundidade nos botões da urna */
+.tecla {
+    box-shadow: 3px 3px 0px #111;
+    transition: all 0.1s;
+    border-bottom: 2px solid #000;
+}
+
+.tecla:active {
+    box-shadow: 1px 1px 0px #111;
+    transform: translate(2px, 2px);
+}
+
+/* Visor da Urna */
+#urna-screen-container {
+    background: linear-gradient(to bottom, #e2e2e2, #ffffff);
+}
+
+/* Animação de piscar o cursor (se quiser implementar depois) */
+.blink {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% { opacity: 0; }
+}

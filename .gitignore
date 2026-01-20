@@ -1,0 +1,33 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Ambiente Virtual ---
+venv/
+env/
+.venv/
+
+# --- Variáveis de Ambiente e Segredos (CRÍTICO) ---
+.env
+
+# --- IDEs e Editores ---
+.vscode/
+.idea/
+
+# --- Arquivos do Projeto (Dados Sensíveis/Gerados) ---
+# Ignorar as fotos tiradas na votação
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Ignorar dados reais de colaboradores (CPFs)
+data/*.csv
+!data/.gitkeep
+
+# Logs de erro (se houver)
+*.log
+
+# Scripts utilitários de teste (opcional, se não quiser subir)
+teste_csv.py
+reset_db.py
